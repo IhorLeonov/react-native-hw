@@ -48,11 +48,9 @@ export default function Registration() {
 
       setDimensions(width);
     };
-    Dimensions.addEventListener("change", onChange);
+    const subscription = Dimensions.addEventListener("change", onChange);
 
-    return () => {
-      Dimensions.removeEventListener("change", onChange);
-    };
+    return () => subscription?.remove();
   }, []);
 
   const showKeyboard = () => {
