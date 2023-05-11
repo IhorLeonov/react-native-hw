@@ -2,20 +2,18 @@ import {
     StyleSheet,
     Text,
     View,
-    Image,
     ImageBackground,
     TextInput,
     TouchableOpacity, // имитирует кнопку
     Platform,
     KeyboardAvoidingView, // помогает правильно скрывать клавиатуру
     Keyboard,
-    TouchableWithoutFeedback, // улавливает клики по экрану
+    TouchableWithoutFeedback, // улавливает кликами по экрану
     Dimensions,
   } from "react-native";
   import { useState, useCallback, useEffect } from "react";
   
   import BgImage from "../assets/images/bg-image.jpg";
-  import GirlImage from "../assets/images/photo-girl.png";
   
   import { useFonts } from "expo-font";
   import * as SplashScreen from "expo-splash-screen";
@@ -46,11 +44,9 @@ import {
   
         setDimensions(width);
       };
-      Dimensions.addEventListener("change", onChange);
+      const subscription = Dimensions.addEventListener("change", onChange);
   
-      return () => {
-        Dimensions.removeEventListener("change", onChange);
-      };
+      return () => subscription?.remove();
     }, []);
     
     const showKeyboard = () => {

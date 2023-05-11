@@ -2,14 +2,13 @@ import {
   StyleSheet,
   Text,
   View,
-  Image,
   ImageBackground,
   TextInput,
   TouchableOpacity, // имитирует кнопку
   Platform,
   KeyboardAvoidingView, // помогает правильно скрывать клавиатуру
   Keyboard,
-  TouchableWithoutFeedback, // улавливает клики по экрану
+  TouchableWithoutFeedback, // улавливает кликами по экрану
   Dimensions,
 } from "react-native";
 import { useState, useCallback, useEffect } from "react";
