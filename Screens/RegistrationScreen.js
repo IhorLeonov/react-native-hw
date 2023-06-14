@@ -12,7 +12,7 @@ import {
   Dimensions,
 } from "react-native";
 import { useState, useCallback, useEffect } from "react";
-import CrossSvg from "../assets/images/CrossSvg"
+import CrossSvg from "../assets/images/CrossSvg";
 
 import BgImage from "../assets/images/bg-image.jpg";
 import GirlImage from "../assets/images/photo-girl.png";
@@ -22,21 +22,16 @@ import * as SplashScreen from "expo-splash-screen";
 
 SplashScreen.preventAutoHideAsync();
 
-const initialState = {
-  login: "",
-  email: "",
-  password: "",
-};
-
 export default function Registration() {
-  console.log(Platform.OS);
-  const [fontsLoaded, error] = useFonts({
+  const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
   });
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [state, setState] = useState(initialState);
-  
+  const [login, setLogin] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 16 * 2
   );
@@ -55,14 +50,26 @@ export default function Registration() {
   const showKeyboard = () => {
     setIsShowKeyboard(true);
   };
+
   const hideKeyboard = () => {
     setIsShowKeyboard(false);
     Keyboard.dismiss();
   };
+
+  const resetState = () => {
+    setLogin("");
+    setEmail("");
+    setPassword("");
+  };
+
   const onSubmit = () => {
     hideKeyboard();
-    console.log(state);
-    setState(initialState);
+    console.log({
+      "Login:": login,
+      "Email:": email,
+      "Password:": password,
+    });
+    resetState();
   };
 
   const onLayoutRootView = useCallback(async () => {
@@ -83,15 +90,16 @@ export default function Registration() {
             behavior={Platform.OS === "ios" ? "padding" : "height"}
           >
             <View style={styles.whiteWall}>
-            <ImageBackground
-                  style={styles.girlImg}
-                  source={GirlImage}
-                  transform={[{ translateX: -60 }]}
-                ><View style={styles.addPhoto}>
-                  <CrossSvg/>
+              <ImageBackground
+                style={styles.girlImg}
+                source={GirlImage}
+                transform={[{ translateX: -60 }]}
+              >
+                <View style={styles.addPhoto}>
+                  <CrossSvg />
                 </View>
-                </ImageBackground>
-                <Text style={styles.title}>Регистрация</Text>
+              </ImageBackground>
+              <Text style={styles.title}>Регистрация</Text>
               <View
                 style={{
                   ...styles.form,
@@ -105,10 +113,8 @@ export default function Registration() {
                     placeholder="Логин"
                     onFocus={showKeyboard}
                     onBlur={hideKeyboard}
-                    value={state.login}
-                    onChangeText={(value) =>
-                      setState((prevState) => ({ ...prevState, login: value }))
-                    }
+                    value={login}
+                    onChangeText={setLogin}
                   />
                 </View>
                 <View style={{ marginTop: 16 }}>
@@ -117,10 +123,8 @@ export default function Registration() {
                     placeholder="Адрес электронной почты"
                     onFocus={showKeyboard}
                     onBlur={hideKeyboard}
-                    value={state.email}
-                    onChangeText={(value) =>
-                      setState((prevState) => ({ ...prevState, email: value }))
-                    }
+                    value={email}
+                    onChangeText={setEmail}
                   />
                 </View>
                 <View style={{ marginTop: 16 }}>
@@ -130,17 +134,11 @@ export default function Registration() {
                     secureTextEntry={true}
                     onFocus={showKeyboard}
                     onBlur={hideKeyboard}
-                    value={state.password}
+                    value={password}
                     maxLength={20}
-                    onChangeText={(value) =>
-                      setState((prevState) => ({
-                        ...prevState,
-                        password: value,
-                      }))
-                    }
+                    onChangeText={setPassword}
                   />
-                    <Text style={styles.showPassword}>Показать</Text>
-
+                  <Text style={styles.showPassword}>Показать</Text>
                 </View>
                 <TouchableOpacity
                   onPress={onSubmit}
@@ -170,98 +168,97 @@ export default function Registration() {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: "#fff",
-    },
-    bgImage: {
-      flex: 1,
-      resizeMode: "cover",
-      justifyContent: "flex-end",
-    },
-    whiteWall: {
-      marginTop: "auto",
-      position: "relative",
-      borderTopLeftRadius: 25,
-      borderTopRightRadius: 25,
-      backgroundColor: "#fff",
-      alignItems: "center",
-    },
-    form: {
-    },
-    girlImg: {
-      position: "absolute",
-      top: -60,
-      left: "50%",
-      width: 120,
-      height: 120,
-    },
-    addPhoto: {
-      position: "absolute",
-      left: (120 - 25)/2,
-      top: 80,
-      justifyContent: "center",
-      alignItems: "center",
-      
-      width: 25,
-      height: 25,
-      borderWidth: 1,
-      borderColor: "#E8E8E8",
-      borderRadius: 50,
-      backgroundColor: "#FFFFFF",
-    },
-    title: {
-      marginTop: 92,
-      fontFamily: "Roboto-Medium",
-      fontSize: 30,
-      lineHeight: 35,
-      textAlign: "center",
-      letterSpacing: 0.01,
-      color: "#212121",
-    },
-    input: {
-        position: "relative",
-      backgroundColor: "#F6F6F6",
-      borderRadius: 8,
-      borderWidth: 1,
-      borderColor: "#E8E8E8",
-      height: 50,
-      padding: 16,
-      paddingBottom: 15,
-      color: "#212121",
-      fontFamily: "Roboto-Regular",
-    },
-    showPassword: {
-        position: "absolute",
-        top: 16,
-        right: 16,
-        
-        fontFamily: "Roboto-Regular",
-        fontSize: 16,
-        lineHeight: 19,
-        color: "#1B4371",
-      },
-    btn: {
-      backgroundColor: "#FF6C00",
-      height: 51,
-      borderRadius: 100,
-      marginTop: 43,
-      justifyContent: "center",
-      alignItems: "center",
-    },
-    btnTitle: {
-      fontFamily: "Roboto-Regular",
-      fontSize: 16,
-      lineHeight: 19,
-      color: "#FFFFFF",
-    },
-    textLogin: {
-      marginTop: 16,
-      color: "#1B4371",
-      textAlign: "center",
-  
-      fontFamily: "Roboto-Regular",
-      fontSize: 16,
-      lineHeight: 19,
-    },
-  });
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  bgImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "flex-end",
+  },
+  whiteWall: {
+    marginTop: "auto",
+    position: "relative",
+    borderTopLeftRadius: 25,
+    borderTopRightRadius: 25,
+    backgroundColor: "#fff",
+    alignItems: "center",
+  },
+  form: {},
+  girlImg: {
+    position: "absolute",
+    top: -60,
+    left: "50%",
+    width: 120,
+    height: 120,
+  },
+  addPhoto: {
+    position: "absolute",
+    left: (120 - 25) / 2,
+    top: 80,
+    justifyContent: "center",
+    alignItems: "center",
+
+    width: 25,
+    height: 25,
+    borderWidth: 1,
+    borderColor: "#E8E8E8",
+    borderRadius: 50,
+    backgroundColor: "#FFFFFF",
+  },
+  title: {
+    marginTop: 92,
+    fontFamily: "Roboto-Medium",
+    fontSize: 30,
+    lineHeight: 35,
+    textAlign: "center",
+    letterSpacing: 0.01,
+    color: "#212121",
+  },
+  input: {
+    position: "relative",
+    backgroundColor: "#F6F6F6",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#E8E8E8",
+    height: 50,
+    padding: 16,
+    paddingBottom: 15,
+    color: "#212121",
+    fontFamily: "Roboto-Regular",
+  },
+  showPassword: {
+    position: "absolute",
+    top: 16,
+    right: 16,
+
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    lineHeight: 19,
+    color: "#1B4371",
+  },
+  btn: {
+    backgroundColor: "#FF6C00",
+    height: 51,
+    borderRadius: 100,
+    marginTop: 43,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  btnTitle: {
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    lineHeight: 19,
+    color: "#FFFFFF",
+  },
+  textLogin: {
+    marginTop: 16,
+    color: "#1B4371",
+    textAlign: "center",
+
+    fontFamily: "Roboto-Regular",
+    fontSize: 16,
+    lineHeight: 19,
+  },
+});
