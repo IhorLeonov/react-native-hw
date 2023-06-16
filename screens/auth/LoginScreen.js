@@ -8,33 +8,25 @@ import {
   Platform,
   KeyboardAvoidingView, // помогает правильно скрывать клавиатуру
   Keyboard,
-  TouchableWithoutFeedback, // улавливает кликами по экрану
+  TouchableWithoutFeedback, // улавливает клики по экрану
   Dimensions,
 } from "react-native";
-import { useState, useCallback, useEffect } from "react";
+
+import BgImage from "../../assets/images/bg-image.jpg";
+
+import { useState, useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-
-import BgImage from "../assets/images/bg-image.jpg";
-
-import { useFonts } from "expo-font";
-import * as SplashScreen from "expo-splash-screen";
-
-SplashScreen.preventAutoHideAsync();
 
 const initialState = {
   email: "",
   password: "",
 };
 
-export default function Login() {
-  const [fontsLoaded] = useFonts({
-    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
-    "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
-  });
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [state, setState] = useState(initialState);
+export default function LoginScreen() {
   const navigation = useNavigation();
 
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [state, setState] = useState(initialState);
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 16 * 2
   );
@@ -70,19 +62,9 @@ export default function Login() {
     setState(initialState);
   };
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
-
-  if (!fontsLoaded) {
-    return null;
-  }
-
   return (
     <TouchableWithoutFeedback onPress={hideKeyboard}>
-      <View style={styles.container} onLayout={onLayoutRootView}>
+      <View style={styles.container}>
         <ImageBackground style={styles.bgImage} source={BgImage}>
           <KeyboardAvoidingView
             behavior={Platform.OS === "ios" ? "padding" : "height"}
@@ -108,6 +90,7 @@ export default function Login() {
                     }
                   />
                 </View>
+
                 <View style={{ marginTop: 16 }}>
                   <TextInput
                     style={styles.input}
@@ -126,6 +109,7 @@ export default function Login() {
                   />
                   <Text style={styles.showPassword}>Показать</Text>
                 </View>
+
                 <TouchableOpacity
                   style={{
                     ...styles.btn,
@@ -136,15 +120,20 @@ export default function Login() {
                 >
                   <Text style={styles.btnTitle}>Войти</Text>
                 </TouchableOpacity>
-                <Text
-                  style={{
-                    ...styles.textLogin,
-                    display: isShowKeyboard ? "none" : "flex",
-                  }}
+
+                <TouchableOpacity
+                  style={{ marginTop: 16, alignSelf: "center" }}
                   onPress={() => navigation.navigate("Register")}
                 >
-                  Нет аккаунта? Зарегистрироваться
-                </Text>
+                  <Text
+                    style={{
+                      ...styles.toRegisterLink,
+                      display: isShowKeyboard ? "none" : "flex",
+                    }}
+                  >
+                    Нет аккаунта? Зарегистрироваться
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -218,11 +207,8 @@ const styles = StyleSheet.create({
     lineHeight: 19,
     color: "#FFFFFF",
   },
-  textLogin: {
-    marginTop: 16,
+  toRegisterLink: {
     color: "#1B4371",
-    textAlign: "center",
-
     fontFamily: "Roboto-Regular",
     fontSize: 16,
     lineHeight: 19,
