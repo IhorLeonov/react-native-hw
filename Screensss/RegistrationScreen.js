@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { useState, useCallback, useEffect } from "react";
 import CrossSvg from "../assets/images/CrossSvg";
+import { useNavigation } from "@react-navigation/native";
 
 import BgImage from "../assets/images/bg-image.jpg";
 import GirlImage from "../assets/images/photo-girl.png";
@@ -22,15 +23,21 @@ import * as SplashScreen from "expo-splash-screen";
 
 SplashScreen.preventAutoHideAsync();
 
+const initialState = {
+  login: "",
+  email: "",
+  password: "",
+};
+
 export default function Registration() {
   const [fontsLoaded] = useFonts({
     "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
     "Roboto-Medium": require("../assets/fonts/Roboto-Medium.ttf"),
   });
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [login, setLogin] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [state, setState] = useState(initialState);
+
+  const navigation = useNavigation();
 
   const [dimensions, setDimensions] = useState(
     Dimensions.get("window").width - 16 * 2
@@ -56,20 +63,16 @@ export default function Registration() {
     Keyboard.dismiss();
   };
 
-  const resetState = () => {
-    setLogin("");
-    setEmail("");
-    setPassword("");
-  };
-
   const onSubmit = () => {
     hideKeyboard();
-    console.log({
-      "Login:": login,
-      "Email:": email,
-      "Password:": password,
+
+    navigation.navigate("Home", {
+      login: state.login,
+      email: state.email,
+      password: state.password,
     });
-    resetState();
+
+    setState(initialState);
   };
 
   const onLayoutRootView = useCallback(async () => {
@@ -113,8 +116,10 @@ export default function Registration() {
                     placeholder="Логин"
                     onFocus={showKeyboard}
                     onBlur={hideKeyboard}
-                    value={login}
-                    onChangeText={setLogin}
+                    value={state.login}
+                    onChangeText={(value) =>
+                      setState((prevState) => ({ ...prevState, login: value }))
+                    }
                   />
                 </View>
                 <View style={{ marginTop: 16 }}>
@@ -123,8 +128,10 @@ export default function Registration() {
                     placeholder="Адрес электронной почты"
                     onFocus={showKeyboard}
                     onBlur={hideKeyboard}
-                    value={email}
-                    onChangeText={setEmail}
+                    value={state.email}
+                    onChangeText={(value) =>
+                      setState((prevState) => ({ ...prevState, email: value }))
+                    }
                   />
                 </View>
                 <View style={{ marginTop: 16 }}>
@@ -134,19 +141,24 @@ export default function Registration() {
                     secureTextEntry={true}
                     onFocus={showKeyboard}
                     onBlur={hideKeyboard}
-                    value={password}
+                    value={state.password}
                     maxLength={20}
-                    onChangeText={setPassword}
+                    onChangeText={(value) =>
+                      setState((prevState) => ({
+                        ...prevState,
+                        password: value,
+                      }))
+                    }
                   />
                   <Text style={styles.showPassword}>Показать</Text>
                 </View>
                 <TouchableOpacity
-                  onPress={onSubmit}
                   style={{
                     ...styles.btn,
                     display: isShowKeyboard ? "none" : "flex",
                   }}
                   activeOpacity={0.8}
+                  onPress={onSubmit}
                 >
                   <Text style={styles.btnTitle}>Зарегистрироваться</Text>
                 </TouchableOpacity>
@@ -155,6 +167,7 @@ export default function Registration() {
                     ...styles.textLogin,
                     display: isShowKeyboard ? "none" : "flex",
                   }}
+                  onPress={() => navigation.navigate("Login")}
                 >
                   Уже есть аккаунт? Войти
                 </Text>
