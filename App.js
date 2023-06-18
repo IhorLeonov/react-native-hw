@@ -14,8 +14,6 @@ export default function App() {
     "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
   });
 
-  const routing = router(true);
-
   const onLayoutRootView = useCallback(async () => {
     if (fontsLoaded) {
       await SplashScreen.hideAsync();
@@ -25,6 +23,8 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+
+  const routing = router("null");
 
   return (
     <NavigationContainer onReady={onLayoutRootView}>
