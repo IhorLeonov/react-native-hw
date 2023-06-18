@@ -1,5 +1,9 @@
-import { View } from "react-native";
+import { View, Text } from "react-native";
 
 export default function Comments() {
-  return <View>Comments</View>;
+  return (
+    <View>
+      <Text></Text>
+    </View>
+  );
 }
