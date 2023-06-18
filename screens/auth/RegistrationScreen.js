@@ -4,11 +4,11 @@ import {
   View,
   ImageBackground,
   TextInput,
-  TouchableOpacity, // имитирует кнопку
+  TouchableOpacity,
   Platform,
-  KeyboardAvoidingView, // помогает правильно скрывать клавиатуру
+  KeyboardAvoidingView,
   Keyboard,
-  TouchableWithoutFeedback, // улавливает клики по экрану
+  TouchableWithoutFeedback,
   Dimensions,
 } from "react-native";
 
@@ -75,18 +75,17 @@ export default function RegistrationScreen() {
           >
             <View style={styles.whiteWall}>
               <ImageBackground
-                style={styles.girlImg}
+                style={styles.girlImage}
                 source={GirlImage}
                 transform={[{ translateX: -60 }]}
               >
-                <View style={styles.addPhoto}>
+                <View style={styles.crossImage}>
                   <CrossSvg />
                 </View>
               </ImageBackground>
               <Text style={styles.title}>Регистрация</Text>
               <View
                 style={{
-                  ...styles.form,
                   marginBottom: isShowKeyboard ? 32 : 78,
                   width: dimensions,
                 }}
@@ -185,15 +184,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     alignItems: "center",
   },
-  form: {},
-  girlImg: {
+  girlImage: {
     position: "absolute",
     top: -60,
     left: "50%",
     width: 120,
     height: 120,
   },
-  addPhoto: {
+  crossImage: {
     position: "absolute",
     left: (120 - 25) / 2,
     top: 80,
