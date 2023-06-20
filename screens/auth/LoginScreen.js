@@ -4,7 +4,7 @@ import {
   View,
   ImageBackground,
   TextInput,
-  TouchableOpacity, // имитирует кнопку
+  TouchableOpacity,
   Platform,
   KeyboardAvoidingView, // помогает правильно скрывать клавиатуру
   Keyboard,

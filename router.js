@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { StyleSheet } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { ButtonBack } from "./components/ButtonBack";
 
 import RegistrationScreen from "./screens/auth/RegistrationScreen";
 import LoginScreen from "./screens/auth/LoginScreen";
@@ -9,8 +9,6 @@ import CommentsScreen from "./screens/CommentsScreen";
 import MapScreen from "./screens/MapScreen";
 
 const AuthStack = createStackNavigator();
-
-const buttonBack = () => <AntDesign name="arrowleft" size={24} color="black" />;
 
 export const router = (isAuth) => {
   if (!isAuth) {
@@ -35,7 +33,8 @@ export const router = (isAuth) => {
       screenOptions={{
         headerTitleStyle: styles.headerTitleStyle,
         headerTitleAlign: "center",
-        headerBackImage: buttonBack,
+        headerBackImage: ButtonBack,
+        headerBackTitleVisible: false,
       }}
     >
       <AuthStack.Screen
@@ -56,7 +55,7 @@ export const router = (isAuth) => {
 const styles = StyleSheet.create({
   headerTitleStyle: {
     color: "#212121",
-    fontFamily: "Roboto-Medium",
+    // fontFamily: "Roboto-Medium",
     fontSize: 17,
     lineHeight: 22,
   },
