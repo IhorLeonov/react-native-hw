@@ -34,16 +34,17 @@ const styles = StyleSheet.create({
     paddingTop: 32,
     paddingBottom: 16,
   },
-  girlImage: { width: 60, height: 60 },
+  girlImage: {
+    width: 60,
+    height: 60,
+  },
   textName: {
-    fontFamily: "Roboto",
-    fontWeight: 700,
+    fontFamily: "Roboto-Bold",
     fontSize: 13,
     lineHeight: 15,
   },
   textEmail: {
-    fontFamily: "Roboto",
-    fontWeight: 400,
+    fontFamily: "Roboto-Regular",
     fontSize: 11,
     lineHeight: 13,
     color: "rgba(33, 33, 33, 0.8)",

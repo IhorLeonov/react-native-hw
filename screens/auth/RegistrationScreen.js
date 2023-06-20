@@ -92,7 +92,7 @@ export default function RegistrationScreen() {
               >
                 <View style={{ marginTop: 32 }}>
                   <TextInput
-                    style={styles.input}
+                    style={{ ...styles.input }}
                     placeholder="Логин"
                     onFocus={showKeyboard}
                     onBlur={hideKeyboard}

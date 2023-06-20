@@ -1,7 +1,8 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
 import { StyleSheet, View } from "react-native";
-import { MaterialIcons, AntDesign, Feather } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { ButtonBack } from "../components/ButtonBack";
+import { LogoutButton } from "../components/LogoutButton";
 
 import CreatePostsScreen from "./main/CreatePostsScreen";
 import ProfileScreen from "./main/ProfileScreen";
@@ -10,43 +11,17 @@ import PostsScreen from "./main/PostsScreen";
 const BottomTabs = createBottomTabNavigator();
 
 export default function Home() {
-  const navigation = useNavigation();
-
-  const postsIcon = (color) => (
+  const postsButton = (color) => (
     <AntDesign name="appstore-o" size={24} color={color} />
   );
-  const createIcon = (color) => (
-    <View style={styles.createIcon}>
+  const createButton = (color) => (
+    <View style={styles.createButton}>
       <AntDesign name="plus" size={13} color="#fff" />
     </View>
   );
-  const profileIcon = (color) => (
+  const profileButton = (color) => (
     <Feather name="user" size={24} color={color} />
   );
-
-  const buttonBack = () => (
-    <AntDesign
-      style={{ marginLeft: 10 }}
-      name="arrowleft"
-      size={24}
-      color="black"
-      onPress={() => navigation.navigate("Posts")}
-    />
-  );
-
-  const logoutButton = () => (
-    <MaterialIcons
-      style={{ marginRight: 10 }}
-      name="logout"
-      size={24}
-      color="#BDBDBD"
-      onPress={() => navigation.navigate("Comments")}
-    />
-  );
-
-  // const {
-  //   params: {},s
-  // } = useRoute();
 
   return (
     <BottomTabs.Navigator
@@ -54,7 +29,8 @@ export default function Home() {
         headerTitleStyle: styles.headerTitleStyle,
         headerTitleAlign: "center",
         tabBarShowLabel: false,
-        tabBarStyle: { height: 70, paddingBottom: 13 },
+        tabBarStyle: { height: 70, paddingTop: 15 },
+        tabBarItemStyle: {},
       }}
     >
       <BottomTabs.Screen
@@ -62,8 +38,8 @@ export default function Home() {
         component={PostsScreen}
         options={{
           title: "Публикации",
-          headerRight: logoutButton,
-          tabBarIcon: ({ focused, size, color }) => postsIcon(color),
+          headerRight: LogoutButton,
+          tabBarIcon: ({ focused, size, color }) => postsButton(color),
         }}
       />
       <BottomTabs.Screen
@@ -72,8 +48,8 @@ export default function Home() {
         options={{
           title: "Создать публикацию",
           tabBarStyle: { display: "none" },
-          headerLeft: buttonBack,
-          tabBarIcon: ({ focused, size, color }) => createIcon(color),
+          headerLeft: ButtonBack,
+          tabBarIcon: ({ focused, size, color }) => createButton(color),
         }}
       />
       <BottomTabs.Screen
@@ -81,7 +57,7 @@ export default function Home() {
         component={ProfileScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({ focused, size, color }) => profileIcon(color),
+          tabBarIcon: ({ focused, size, color }) => profileButton(color),
         }}
       />
     </BottomTabs.Navigator>
@@ -95,7 +71,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     lineHeight: 22,
   },
-  createIcon: {
+  createButton: {
     backgroundColor: "#FF6C00",
     width: 70,
     height: 40,
