@@ -25,7 +25,7 @@ export default function App() {
     return null;
   }
 
-  const routing = router("nljn");
+  const routing = router("");
 
   return (
     <NavigationContainer onReady={onLayoutRootView}>
