@@ -17,7 +17,6 @@ const PostsScreen = () => {
 
   useEffect(() => {
     if (params) {
-      console.log(params.photo);
       setPosts((prevState) => [...prevState, params]);
     }
   }, [params]);
@@ -26,7 +25,7 @@ const PostsScreen = () => {
     <View style={styles.container}>
       <View style={styles.header}>
         <ImageBackground
-          style={styles.girlImage}
+          style={styles.avatar}
           source={GirlImage}
         ></ImageBackground>
         <View style={{ marginLeft: 8 }}>
@@ -37,9 +36,9 @@ const PostsScreen = () => {
       <FlatList
         data={posts}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={(item, index) => {
+        renderItem={({ item, index }) => {
           return (
-            <View style={styles.postContainer} id={item.id}>
+            <View style={styles.postContainer}>
               <Image source={{ uri: item.photo }} style={styles.postImage} />
             </View>
           );
@@ -64,7 +63,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginBottom: 32,
   },
-  girlImage: {
+  avatar: {
     width: 60,
     height: 60,
   },
@@ -82,8 +81,8 @@ const styles = StyleSheet.create({
   postContainer: { marginBottom: 10 },
   postImage: {
     borderRadius: 8,
-    borderColor: "#E8E8E8",
-    borderWidth: 1,
+    // borderColor: "#E8E8E8",
+    // borderWidth: 1,
     height: 240,
     width: "100%",
   },
