@@ -23,29 +23,45 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { Camera, CameraType } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
+import * as Location from "expo-location";
 
 export default function CreatePosts() {
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [hasCameraPermission, setHasCameraPermission] = useState(null);
-  const [hasLibraryPermission, setHasLibraryPermission] = useState();
-  const [cameraRef, setCameraRef] = useState(null);
-  const [type, setType] = useState(CameraType.back);
-  const [photo, setPhoto] = useState("");
-  const [name, setName] = useState("");
-  const [location, setLocation] = useState("");
-
   const navigation = useNavigation();
 
-  const requestPermissionAgain = () => {
+  const [hasCameraPermission, setHasCameraPermission] = useState(null);
+  const [hasLibraryPermission, setHasLibraryPermission] = useState(null);
+  const [hasLocationPermission, setHasLocationPermission] = useState(null);
+
+  const [cameraRef, setCameraRef] = useState(null);
+  const [type, setType] = useState(CameraType.back);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [errorMsg, setErrorMsg] = useState(null);
+
+  const [name, setName] = useState(null);
+  const [photo, setPhoto] = useState(null);
+  const [location, setLocation] = useState(null);
+
+  const settingsLink = () => {
     Linking.openSettings();
   };
 
   useEffect(() => {
     (async () => {
-      const cameraPermission = await Camera.requestCameraPermissionsAsync();
-      const libraryPermission = await MediaLibrary.requestPermissionsAsync();
-      setHasCameraPermission(cameraPermission.status === "granted");
-      setHasLibraryPermission(libraryPermission.status === "granted");
+      let camera = await Camera.requestCameraPermissionsAsync();
+      let library = await MediaLibrary.requestPermissionsAsync();
+      let location = await Location.requestForegroundPermissionsAsync();
+
+      if (camera.status !== "granted") {
+        setErrorMsg("Permissions for camera not granted.");
+        return;
+      }
+      if (location.status !== "granted") {
+        setErrorMsg("Permission to access location was denied.");
+        return;
+      }
+      setHasCameraPermission(camera.status === "granted");
+      setHasLibraryPermission(library.status === "granted");
+      setHasLocationPermission(location.status === "granted");
     })();
   }, []);
 
@@ -57,15 +73,28 @@ export default function CreatePosts() {
 
   const takePhoto = async () => {
     if (cameraRef) {
-      const { uri } = await cameraRef.takePictureAsync(null);
+      let photo = await cameraRef.takePictureAsync(null);
+      let location = await Location.getCurrentPositionAsync({});
+
+      const coords = {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+      };
+
+      setLocation(coords);
+      setPhoto(photo.uri);
       // await MediaLibrary.createAssetAsync(uri);
-      setPhoto(uri);
+      // console.log("latitude", location.coords.latitude);
+      // console.log("longitude", location.coords.longitude);
     }
   };
 
   const sendState = () => {
-    navigation.navigate("Posts", { photo, name });
-    setPhoto("");
+    if (photo) {
+      navigation.navigate("DefaultScreen", { data: { photo, name } });
+      setPhoto("");
+      setName("");
+    }
   };
 
   const showKeyboard = () => {
@@ -81,13 +110,13 @@ export default function CreatePosts() {
     return <View />;
   }
 
-  if (hasCameraPermission === false) {
+  if (!hasCameraPermission || !hasLocationPermission) {
     return (
       <View style={styles.permissionContainer}>
-        <Text>Permissions for camera not granted.</Text>
+        <Text>{errorMsg}</Text>
         <Text>
           Please change this in{" "}
-          <Text style={styles.settings} onPress={requestPermissionAgain}>
+          <Text style={styles.settings} onPress={settingsLink}>
             settings
           </Text>
           .
@@ -295,5 +324,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "blue",
     textDecorationLine: "underline",
+    fontFamily: "Roboto-Regular",
   },
 });

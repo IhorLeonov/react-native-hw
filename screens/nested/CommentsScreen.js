@@ -1,7 +1,11 @@
 import { StyleSheet, View, Text } from "react-native";
 
 export default function CommentsScreen() {
-  return <View style={styles.container}></View>;
+  return (
+    <View style={styles.container}>
+      <Text>Hello</Text>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
