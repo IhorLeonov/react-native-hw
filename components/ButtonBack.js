@@ -1,6 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
-import { AntDesign } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
+import { iconsGenerator } from "../assets/images/iconsGenerator";
+
+const arrowleftIcon = iconsGenerator("arrowleft", 24, "black");
 
 export const ButtonBack = () => {
   const navigation = useNavigation();
@@ -10,7 +12,7 @@ export const ButtonBack = () => {
       style={{ marginLeft: 10 }}
       onPress={() => navigation.goBack()}
     >
-      <AntDesign name="arrowleft" size={24} color="black" />
+      {arrowleftIcon}
     </TouchableOpacity>
   );
 };

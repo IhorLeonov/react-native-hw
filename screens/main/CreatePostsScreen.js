@@ -90,8 +90,11 @@ export default function CreatePosts() {
   };
 
   const sendState = () => {
-    navigation.navigate("Posts", { photo, name });
-    setPhoto("");
+    if (photo) {
+      navigation.navigate("DefaultScreen", { data: { photo, name } });
+      setPhoto("");
+      setName("");
+    }
   };
 
   const showKeyboard = () => {
@@ -321,5 +324,6 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "blue",
     textDecorationLine: "underline",
+    fontFamily: "Roboto-Regular",
   },
 });
