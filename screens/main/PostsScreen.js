@@ -1,8 +1,8 @@
 import { mduleName } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import DefaultPostsScreen from "../nested/DefaultPostsScreen";
-import CommentsScreen from "../nested/DefaultPostsScreen";
-import MapScreen from "../nested/DefaultPostsScreen";
+import CommentsScreen from "../nested/CommentsScreen";
+import MapScreen from "../nested/MapScreen";
 import { LogoutButton } from "../../components/LogoutButton";
 import { ButtonBack } from "../../components/ButtonBack";
 

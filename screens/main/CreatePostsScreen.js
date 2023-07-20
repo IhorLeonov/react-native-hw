@@ -40,6 +40,7 @@ export default function CreatePosts() {
   const [name, setName] = useState(null);
   const [photo, setPhoto] = useState(null);
   const [location, setLocation] = useState(null);
+  const [locationName, setLocationName] = useState(null);
 
   const settingsLink = () => {
     Linking.openSettings();
@@ -91,9 +92,19 @@ export default function CreatePosts() {
 
   const sendState = () => {
     if (photo) {
-      navigation.navigate("DefaultScreen", { data: { photo, name } });
-      setPhoto("");
+      navigation.navigate("DefaultScreen", {
+        data: {
+          name,
+          photo,
+          location,
+          locationName,
+        },
+      });
+
       setName("");
+      setPhoto("");
+      setLocation(null);
+      setLocationName("");
     }
   };
 
@@ -191,10 +202,8 @@ export default function CreatePosts() {
               placeholder="Местность..."
               onFocus={showKeyboard}
               onBlur={hideKeyboard}
-              // value={location}
-              // onChangeText={(value) =>
-              //   setLocation(value)
-              // }
+              value={locationName}
+              onChangeText={(value) => setLocationName(value)}
             ></TextInput>
           </View>
 

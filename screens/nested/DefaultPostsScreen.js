@@ -1,5 +1,3 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
-import { useEffect, useState } from "react";
 import {
   StyleSheet,
   Text,
@@ -10,8 +8,9 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { useEffect, useState } from "react";
 import { Ionicons, EvilIcons } from "@expo/vector-icons";
-
 import GirlImage from "../../assets/images/photo-girl.png";
 
 export default function DefaultPostsScreen() {
@@ -63,7 +62,12 @@ export default function DefaultPostsScreen() {
                 <TouchableOpacity
                   style={styles.locationLink}
                   activeOpacity={0.8}
-                  onPress={() => navigation.navigate("Map")}
+                  onPress={() =>
+                    navigation.navigate("Map", {
+                      location: item.location,
+                      name: item.name,
+                    })
+                  }
                 >
                   <EvilIcons
                     style={{ marginRight: 4 }}
@@ -71,9 +75,7 @@ export default function DefaultPostsScreen() {
                     size={24}
                     color="#BDBDBD"
                   />
-                  <Text style={styles.locationText}>
-                    Ivano-Frankivs'k Region, Ukraine
-                  </Text>
+                  <Text style={styles.locationText}>{item.locationName}</Text>
                 </TouchableOpacity>
               </View>
             </View>
