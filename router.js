@@ -1,7 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { StyleSheet } from "react-native";
-// import { ButtonBack } from "./components/ButtonBack";
-
+// import { StyleSheet } from "react-native";
 import RegistrationScreen from "./screens/auth/RegistrationScreen";
 import LoginScreen from "./screens/auth/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
@@ -35,13 +33,3 @@ export const router = (isAuth) => {
     </AuthStack.Navigator>
   );
 };
-
-const styles = StyleSheet.create({
-  headerTitleStyle: {
-    // fontFamily: "Roboto-Medium",
-    // fontWeight: 500,
-    // fontSize: 17,
-    // lineHeight: 22,
-    // Не работают!
-  },
-});

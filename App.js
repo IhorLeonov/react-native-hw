@@ -3,6 +3,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { useCallback } from "react";
 import { router } from "./router";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 import * as SplashScreen from "expo-splash-screen";
 
@@ -25,11 +27,13 @@ export default function App() {
     return null;
   }
 
-  const routing = router("qwe");
+  const routing = router("");
 
   return (
-    <NavigationContainer onReady={onLayoutRootView}>
-      {routing}
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer onReady={onLayoutRootView}>
+        {routing}
+      </NavigationContainer>
+    </Provider>
   );
 }

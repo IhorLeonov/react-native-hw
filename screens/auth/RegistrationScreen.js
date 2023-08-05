@@ -18,6 +18,8 @@ import CrossSvg from "../../assets/images/CrossSvg";
 
 import { useState, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
+import { useDispatch } from "react-redux";
+import { authSignUpUser } from "../../redux/auth/operations";
 
 const initialState = {
   login: "",
@@ -27,6 +29,7 @@ const initialState = {
 
 export default function RegistrationScreen() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
@@ -57,12 +60,13 @@ export default function RegistrationScreen() {
   const onSubmit = () => {
     hideKeyboard();
 
-    navigation.navigate("Home", {
-      login: state.login,
-      email: state.email,
-      password: state.password,
-    });
+    // navigation.navigate("Home", {
+    //   login: state.login,
+    //   email: state.email,
+    //   password: state.password,
+    // });
 
+    dispatch(authSignUpUser(state));
     setState(initialState);
   };
 

@@ -16,6 +16,9 @@ import BgImage from "../../assets/images/bg-image.jpg";
 
 import { useState, useEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { authSignInUser } from "../../redux/auth/operations";
+
+import { useDispatch } from "react-redux";
 
 const initialState = {
   email: "",
@@ -24,6 +27,7 @@ const initialState = {
 
 export default function LoginScreen() {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
 
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [state, setState] = useState(initialState);
@@ -54,11 +58,14 @@ export default function LoginScreen() {
   const onSubmit = () => {
     hideKeyboard();
 
-    navigation.navigate("Home", {
-      screen: "PostsScreen",
-      params: { email: state.email, password: state.password },
-    });
+    // console.log("state", state);
+    // navigation.navigate("Home", {
+    //   screen: "PostsScreen",
+    //   params: { email: state.email, password: state.password },
+    // });
 
+    console.log(state);
+    dispatch(authSignInUser(state));
     setState(initialState);
   };
 
