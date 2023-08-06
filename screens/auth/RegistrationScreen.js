@@ -59,15 +59,14 @@ export default function RegistrationScreen() {
 
   const onSubmit = () => {
     hideKeyboard();
+    dispatch(authSignUpUser(state));
+    setState(initialState);
 
     // navigation.navigate("Home", {
     //   login: state.login,
     //   email: state.email,
     //   password: state.password,
     // });
-
-    dispatch(authSignUpUser(state));
-    setState(initialState);
   };
 
   return (
