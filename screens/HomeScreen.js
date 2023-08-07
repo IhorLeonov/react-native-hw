@@ -10,7 +10,22 @@ import PostsScreen from "./main/PostsScreen";
 
 const BottomTabs = createBottomTabNavigator();
 
+import { useSelector } from "react-redux";
+import {
+  selectLogin,
+  selectStateChange,
+  selectUserId,
+} from "../redux/auth/selectors";
+
 export default function Home() {
+  const login = useSelector(selectLogin);
+  const userId = useSelector(selectUserId);
+  const stateChange = useSelector(selectStateChange);
+
+  console.log("Login", login);
+  console.log("UserId", userId);
+  console.log("StateChange", stateChange);
+
   return (
     <BottomTabs.Navigator
       screenOptions={{

@@ -61,12 +61,6 @@ export default function RegistrationScreen() {
     hideKeyboard();
     dispatch(authSignUpUser(state));
     setState(initialState);
-
-    // navigation.navigate("Home", {
-    //   login: state.login,
-    //   email: state.email,
-    //   password: state.password,
-    // });
   };
 
   return (

@@ -57,14 +57,6 @@ export default function LoginScreen() {
 
   const onSubmit = () => {
     hideKeyboard();
-
-    // console.log("state", state);
-    // navigation.navigate("Home", {
-    //   screen: "PostsScreen",
-    //   params: { email: state.email, password: state.password },
-    // });
-
-    console.log(state);
     dispatch(authSignInUser(state));
     setState(initialState);
   };
