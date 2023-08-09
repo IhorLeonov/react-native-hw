@@ -10,9 +10,3 @@ export default function App() {
     </Provider>
   );
 }
-
-// "jsEngine": "hermes",
-// "ios": {
-//   "jsEngine": "jsc",
-//   "supportsTablet": true
-// },

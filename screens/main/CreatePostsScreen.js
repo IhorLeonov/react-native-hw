@@ -25,6 +25,15 @@ import { Camera, CameraType } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 
+// import { collection, addDoc } from "firebase/firestore";
+import {
+  ref,
+  getDownloadURL,
+  uploadBytes,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { storage, db } from "../../firebase/config";
+
 export default function CreatePosts() {
   const navigation = useNavigation();
 
@@ -85,13 +94,37 @@ export default function CreatePosts() {
       setLocation(coords);
       setPhoto(photo.uri);
       // await MediaLibrary.createAssetAsync(uri);
-      // console.log("latitude", location.coords.latitude);
-      // console.log("longitude", location.coords.longitude);
     }
   };
 
-  const sendState = () => {
+  const uploadPhotoToServer = async () => {
+    try {
+      const response = await fetch(photo);
+      const file = await response.blob();
+      const uniqId = Date.now().toString();
+
+      // const firebaseStore = {
+      //   avatar: "userAvatar/avatar",
+      //   post: "postImage/post",
+      // };
+
+      const pathReference = ref(storage, `postImage/post`);
+      // console.log("pathReference", pathReference);
+
+      await uploadBytes(pathReference, file);
+      // console.log("bytes", bytes);
+
+      const postImageUrl = await getDownloadURL(pathReference);
+      console.log("postImageUrl:", postImageUrl);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  const sendPost = () => {
     if (photo) {
+      uploadPhotoToServer();
+
       navigation.navigate("DefaultScreen", {
         data: {
           name,
@@ -213,7 +246,7 @@ export default function CreatePosts() {
               // display: isShowKeyboard ? "none" : "flex",
             }}
             activeOpacity={0.8}
-            onPress={sendState}
+            onPress={sendPost}
           >
             <Text style={styles.btnTitle}>Опубликовать</Text>
           </TouchableOpacity>

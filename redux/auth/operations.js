@@ -9,6 +9,8 @@ import {
   signOut,
 } from "firebase/auth";
 
+const { updateUserProfile, authStateChange, authSignOut } = authSlice.actions;
+
 export const authSignUpUser =
   ({ email, password, login }) =>
   async (dispatch, getState) => {
@@ -24,7 +26,7 @@ export const authSignUpUser =
       const { uid, displayName } = await auth.currentUser;
       const userData = { userId: uid, login: displayName };
 
-      dispatch(authSlice.actions.updateUserProfile(userData));
+      dispatch(updateUserProfile(userData));
     } catch (error) {
       console.log("Error.message", error.message);
       // console.log("Error", error);
@@ -52,15 +54,17 @@ export const authStateChangeUser = () => async (dispatch, getState) => {
     if (user) {
       const userData = { userId: user.uid, login: user.displayName };
 
-      dispatch(authSlice.actions.authStateChange({ stateChange: true }));
-      dispatch(authSlice.actions.updateUserProfile(userData));
+      dispatch(authStateChange({ stateChange: true }));
+      dispatch(updateUserProfile(userData));
     }
   });
 };
 
-export const authSignOutUser = async () => {
+export const authSignOutUser = () => async (dispatch, getState) => {
   try {
     await signOut(auth);
+    dispatch(authSignOut());
+
     console.log("Sign-out successful.");
   } catch (error) {
     console.log("Error.message", error.message);
