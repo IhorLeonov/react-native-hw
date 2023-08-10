@@ -19,23 +19,20 @@ import {
   Ionicons,
 } from "@expo/vector-icons";
 
+import { useSelector } from "react-redux";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useState, useEffect } from "react";
 import { Camera, CameraType } from "expo-camera";
 import * as MediaLibrary from "expo-media-library";
 import * as Location from "expo-location";
 
-// import { collection, addDoc } from "firebase/firestore";
-import {
-  ref,
-  getDownloadURL,
-  uploadBytes,
-  uploadBytesResumable,
-} from "firebase/storage";
+import { collection, addDoc } from "firebase/firestore";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 import { storage, db } from "../../firebase/config";
 
 export default function CreatePosts() {
   const navigation = useNavigation();
+  const { login, userId } = useSelector((state) => state.auth);
 
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [hasLibraryPermission, setHasLibraryPermission] = useState(null);
@@ -103,27 +100,39 @@ export default function CreatePosts() {
       const file = await response.blob();
       const uniqId = Date.now().toString();
 
-      // const firebaseStore = {
-      //   avatar: "userAvatar/avatar",
-      //   post: "postImage/post",
-      // };
-
-      const pathReference = ref(storage, `postImage/post`);
-      // console.log("pathReference", pathReference);
-
+      const pathReference = ref(storage, `posts/post_${uniqId}`);
       await uploadBytes(pathReference, file);
-      // console.log("bytes", bytes);
-
       const postImageUrl = await getDownloadURL(pathReference);
       console.log("postImageUrl:", postImageUrl);
+      return postImageUrl;
     } catch (error) {
       console.log(error.message);
     }
   };
 
+  const writeDataToFirestore = async () => {
+    try {
+      const image = await uploadPhotoToServer();
+
+      const docRef = await addDoc(collection(db, "users"), {
+        name,
+        image,
+        location,
+        locationName,
+        login,
+        userId,
+      });
+
+      console.log("Document written with ID: ", docRef.id);
+    } catch (e) {
+      console.error("Error adding document: ", e);
+      throw e;
+    }
+  };
+
   const sendPost = () => {
     if (photo) {
-      uploadPhotoToServer();
+      writeDataToFirestore();
 
       navigation.navigate("DefaultScreen", {
         data: {
