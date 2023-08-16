@@ -13,16 +13,45 @@ import { useEffect, useState } from "react";
 import { Ionicons, EvilIcons } from "@expo/vector-icons";
 import GirlImage from "../../assets/images/photo-girl.png";
 
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/config";
+
 export default function DefaultPostsScreen() {
   const navigation = useNavigation();
   const { params } = useRoute();
   const [posts, setPosts] = useState([]);
+  // const [data, setData] = useState([]);
+  console.log("posts", posts);
+  // console.log("data", data);
+
+  const getDataFromFirestore = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      // Перевіряємо у консолі отримані дані
+      querySnapshot.forEach((doc) => console.log(`${doc.id} =>`, doc.data()));
+      // Повертаємо масив обʼєктів у довільній формі
+      const x = querySnapshot.docs.map((doc) => ({
+        id: doc.id,
+        data: doc.data(),
+      }));
+      console.log(x);
+      setPosts(
+        querySnapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
+      );
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
 
   useEffect(() => {
-    if (params) {
-      setPosts((prevState) => [...prevState, params.data]);
-    }
-  }, [params]);
+    getDataFromFirestore();
+  }, []);
+
+  // useEffect(() => {
+  //   if (params) {
+  //     setPosts((prevState) => [...prevState, params.data]);
+  //   }
+  // }, [params]);
 
   return (
     <View style={styles.container}>

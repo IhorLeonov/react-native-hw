@@ -103,7 +103,7 @@ export default function CreatePosts() {
       const pathReference = ref(storage, `posts/post_${uniqId}`);
       await uploadBytes(pathReference, file);
       const postImageUrl = await getDownloadURL(pathReference);
-      console.log("postImageUrl:", postImageUrl);
+
       return postImageUrl;
     } catch (error) {
       console.log(error.message);
@@ -113,7 +113,6 @@ export default function CreatePosts() {
   const writeDataToFirestore = async () => {
     try {
       const image = await uploadPhotoToServer();
-
       const docRef = await addDoc(collection(db, "users"), {
         name,
         image,
@@ -122,11 +121,9 @@ export default function CreatePosts() {
         login,
         userId,
       });
-
       console.log("Document written with ID: ", docRef.id);
     } catch (e) {
-      console.error("Error adding document: ", e);
-      throw e;
+      console.log("Error adding document: ", e);
     }
   };
 
